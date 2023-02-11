@@ -11,9 +11,16 @@ def home():
 
 @app.route('/api/v1/<station>/<date>')
 def api(station, date):
+
+    # Add padding 0s in front of station until it meets 6 char
+    data_frame = read_csv(f'data_small/TG_STAID{station.zfill(6)}.txt', skiprows=20, parse_dates=['    DATE'])
+
+    temperature = data_frame.loc[data_frame['    DATE'] == date]['   TG'].squeeze() / 10
+
     return {
         "station": station,
-        "date": date
+        "date": date,
+        "temperature": temperature
     }
 
 
